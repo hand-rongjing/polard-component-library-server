@@ -1,30 +1,9 @@
-const  mockjs = require('mockjs') ;
-const { getRule, postRule } = require('./rule');
-const { getActivities, getNotice, getFakeList }= require('./api');
-const { getFakeChartData }= require('./chart');
-const { getProfileBasicData }= require('./profile');
-const { getProfileAdvancedData }= require('./profile');
-const { getNotices } =require('./notices');
-const { format, delay } =require('../utils/roadhog-api-doc-util');
+const mockjs = require('mockjs');
+const { getActivities, getNotice, getFakeList } = require('./api');
+const { format, delay } = require('../utils/roadhog-api-doc-util');
 
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
-  // 支持值为 Object 和 Array
-  'GET /api/currentUser': {
-    $desc: '获取当前用户接口',
-    $params: {
-      pageSize: {
-        desc: '分页',
-        exp: 2,
-      },
-    },
-    $body: {
-      name: 'Serati Ma',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-      userid: '00000001',
-      notifyCount: 12,
-    },
-  },
   // GET POST 可省略
   'GET /api/users': [
     {
@@ -48,16 +27,6 @@ const proxy = {
   ],
   'GET /api/project/notice': getNotice,
   'GET /api/activities': getActivities,
-  'GET /api/rule': getRule,
-  'POST /api/rule': {
-    $params: {
-      pageSize: {
-        desc: '分页',
-        exp: 2,
-      },
-    },
-    $body: postRule,
-  },
   'POST /api/forms': (req, res) => {
     res.send({ message: 'Ok' });
   },
@@ -65,9 +34,6 @@ const proxy = {
     'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }],
   }),
   'GET /api/fake_list': getFakeList,
-  'GET /api/fake_chart_data': getFakeChartData,
-  'GET /api/profile/basic': getProfileBasicData,
-  'GET /api/profile/advanced': getProfileAdvancedData,
   'POST /api/login/account': (req, res) => {
     const { password, userName, type } = req.body;
     if (password === '888888' && userName === 'admin') {
@@ -95,7 +61,6 @@ const proxy = {
   'POST /api/register': (req, res) => {
     res.send({ status: 'ok', currentAuthority: 'user' });
   },
-  'GET /api/notices': getNotices,
   'GET /api/500': (req, res) => {
     res.status(500).send({
       timestamp: 1513932555104,
@@ -132,16 +97,19 @@ const proxy = {
       path: '/base/category/list',
     });
   },
+  'POST /base/api/user/component/setting/list': [],
+  'GET /base/api/user/component/setting/list': [],
+  'GET /base/api/user/component/setting/listAll': {},
 };
 // console.log(proxy);
 const proxyEnd = delay(proxy, 1000)
 const mockData = proxyEnd.__mockData;
 // console.log(proxyEnd);
 const resData = {
-  GET:{},
-  POST:{}
+  GET: {},
+  POST: {}
 };
-Object.keys(mockData).forEach(function(key) {
+Object.keys(mockData).forEach(function (key) {
   const request = key.split(' ');
   const Method = request[0];
   const ResBody = proxy[key];
@@ -156,17 +124,17 @@ Object.keys(mockData).forEach(function(key) {
   //     })
   //     break;
   //     case 'POST':
-//         router.post(URL, async()=>{
-//             const post = ctx.request.body;
-//   const id = posts.push(post) - 1;
-//   post.created_at = new Date();
-//   post.id = id;
-//   ctx.redirect('/');
-//         })
-      // break;
-      // default:
-      // break;
+  //         router.post(URL, async()=>{
+  //             const post = ctx.request.body;
+  //   const id = posts.push(post) - 1;
+  //   post.created_at = new Date();
+  //   post.id = id;
+  //   ctx.redirect('/');
+  //         })
+  // break;
+  // default:
+  // break;
   // }
 });
 
-module.exports = {resData,proxyEnd};
+module.exports = { resData, proxyEnd };
