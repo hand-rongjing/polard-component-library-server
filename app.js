@@ -13,11 +13,17 @@ var morgan = require('morgan');
 var { resData } = require("./mock/proxy");
 
 var baseRouter = require('./routers/base/index');
+var fileRouter = require('./routers/file/index');
+var expenseRouter = require('./routers/expense/index');
+
 var app = express();
 
 app.use(morgan('combined'));
 
 app.use("/base",baseRouter);
+app.use("/file", fileRouter);
+app.use("/budget", expenseRouter);
+app.use("/expense", expenseRouter);
 
 // app.use((req, res) => {
 //   var result = resData[req.method][req.url];
