@@ -11,4 +11,21 @@ router.get('/api/budget/reserves/budget/progress/query', (req, res) => {
   res.send([]);
 })
 
+router.post('/api/excel/import/get/properties', (req, res) => {
+  res.send({
+    templateName: '测试导入',
+    templateCode: 'test',
+    sheetList: [{
+      sheetName: '页签1',
+      sheetIndex: 1,
+      columns: [
+        { columnName: '公司', columnCode: 'companyCode' },
+        { columnName: '部门', columnCode: 'departmentCode' },
+        { columnName: '岗位', columnCode: 'positionCode' },
+        { columnName: '测试', columnCode: 'test' },
+      ],
+    }],
+  })
+})
+
 module.exports = router;
