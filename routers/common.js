@@ -15,6 +15,15 @@ const { basicArray } = Mock.mock({
   }]
 });
 
+// mock外嵌套一层function是为了避免随机生成的所有array成员都是相同数据
+const { users } = Mock.mock({
+  "users|5": [{
+    'useCode': function () { return Random.string('number', 5) },
+    'userName': function () { return Mock.mock('@name') },
+    'userId': function () { return Mock.mock('@id') },
+  }]
+});
+
 const noMockArray = Array.from(
   { length: 25 },
   (item, key) => ({ id: key, name: `张${key}`, code: String(key) })
@@ -58,4 +67,5 @@ module.exports = {
   basicArray,
   noMockArray,
   lovConfig,
+  users,
 };
